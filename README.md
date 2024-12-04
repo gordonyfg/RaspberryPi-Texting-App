@@ -1,44 +1,34 @@
-# Raspberry Pi Texting App
+# Texting App for Raspberry Pi
 
 ## Introduction
 
-This project is a texting application between two Raspberry Pi devices (Pi400 and Raspberry Pi 3B) using the Kivy framework for the GUI and SPI/I2C protocols for communication.
+This project is a texting application developed using the Kivy framework, designed to run on a Raspberry Pi 3B+. The application simulates inter-device communication by implementing a client-server architecture on a single device. This setup allows for the demonstration of networking concepts and communication protocols without the need for multiple physical devices.
 
 ## Features
 
-- Real-time texting between two Raspberry Pis.
-- User-friendly GUI developed with Kivy.
-- Communication over SPI/I2C.
-- Unit and integration tests.
-- Optional cloud integration with a simple microservice.
+- **Real-time Texting Simulation**: Communicate between two simulated clients on the same Raspberry Pi.
+- **User-Friendly GUI**: Intuitive graphical interface developed with Kivy.
+- **Client-Server Architecture**: Implements networking concepts using sockets over the localhost interface.
+- **Modular Design**: Communication components are modularized for future integration with SPI/I2C protocols or multiple devices.
+- **Unit and Integration Tests**: Comprehensive tests to ensure code reliability and correctness.
+- **Optional Cloud Integration**: Potential to integrate with a cloud-based microservice for remote communication.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Raspberry Pi 400 and Raspberry Pi 3B.
-- Python 3.x installed on both devices.
-- Kivy framework installed.
-- SPI/I2C enabled on both devices.
-- Git installed for version control.
+- **Hardware**: Raspberry Pi 3B+
+- **Operating System**: Raspberry Pi OS (32-bit)
+- **Python Version**: Python 3.9 installed via Miniforge
+- **Dependencies**:
+  - Kivy framework
+  - Additional Python packages (listed in `environment.yml`)
+- **Development Tools**:
+  - Git for version control
 
 ### Installation
 
-Detailed installation instructions will be provided in the [docs/Installation.md](docs/Installation.md).
+1. **Clone the Repository**
 
-## Usage
-
-Instructions on how to run the application will be provided in the [docs/Usage.md](docs/Usage.md).
-
-## Contributing
-
-Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Inspiration
-- References
+   ```bash
+   git clone https://github.com/yourusername/TextingApp-RaspberryPi.git
