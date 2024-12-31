@@ -1,0 +1,28 @@
+# ui/main.kv
+BoxLayout:
+    orientation: "vertical"
+
+    Spinner:
+        id: protocol_spinner
+        text: "Select Protocol"
+        values: ["UART", "Ethernet"]
+        size_hint: (1, 0.1)
+
+    TextInput:
+        id: message_input
+        hint_text: "Type your message here"
+        multiline: False
+        size_hint: (1, 0.2)
+
+    Button:
+        text: "Send"
+        size_hint: (1, 0.1)
+        on_press: app.send_message()
+
+    Label:
+        id: chat_history
+        text: "Chat History:"
+        size_hint: (1, 0.6)
+        halign: "left"
+        valign: "top"
+        text_size: self.size
