@@ -140,9 +140,14 @@ class ChatApp(App):
         # Initialize protocol handlers with actual IP
         self.protocol_port = 5001  # Fixed port for easier configuration
         self.protocol_handlers = {
-            "Ethernet(Master)": EthernetMasterHandler(host="0.0.0.0", port=self.protocol_port),
-            "Ethernet(Client)": EthernetClientHandler(host="<MASTER_PI_IP>", port=self.protocol_port),
-            "UART": UARTHandler(port="/dev/ttyUSB0", baudrate=9600),
+            "TCP/IP(Server)": EthernetMasterHandler(host="0.0.0.0", port=self.protocol_port),
+            "TCP/IP(Client)": EthernetClientHandler(host="<MASTER_PI_IP>", port=self.protocol_port),
+            "UART/Serial": UARTHandler(port="/dev/ttyUSB0", baudrate=9600),
+            # Future protocols:
+            # "SPI": SPIHandler(bus=0, device=0),
+            # "I2C": I2CHandler(bus=1, address=0x48),
+            # "CAN": CANHandler(channel="can0", bitrate=500000),
+            # "EtherCAT": EtherCATHandler(interface="eth0"),
         }
         self.current_protocol = None
         self.setup_protocol_list()
@@ -200,7 +205,7 @@ class ChatApp(App):
         if not self.current_protocol:
             return
         
-        if self.current_protocol.startswith("Ethernet"):
+        if self.current_protocol.startswith("TCP/IP"):  # Update condition
             handler = self.protocol_handlers[self.current_protocol]
             
             # Check if client lost connection

@@ -7,9 +7,15 @@ This project is a messaging application developed using the Kivy framework. It s
 ## Features
 
 - **Multi-Protocol Support**: 
-  - Ethernet (TCP/IP) with Master/Client modes
-  - UART (Serial) communication support
-  - Extensible protocol handler system
+  - TCP/IP Network Communication
+    - Server mode (Master)
+    - Client mode
+  - UART/Serial Communication
+  - Future protocol support:
+    - SPI (Serial Peripheral Interface)
+    - I2C (Inter-Integrated Circuit)
+    - CAN (Controller Area Network)
+    - EtherCAT (Ethernet for Control Automation Technology)
 
 - **Modern UI Features**:
   - Dark theme interface
@@ -65,7 +71,7 @@ This project is a messaging application developed using the Kivy framework. It s
 
 ## Two-Pi Communication Setup
 
-### On Master Pi (Pi400):
+### On Server Pi (Pi400):
 1. Get the IP address:
    ```bash
    ifconfig
@@ -75,7 +81,7 @@ This project is a messaging application developed using the Kivy framework. It s
    ```bash
    python chatapp.py
    ```
-3. Select "Ethernet(Master)" in the UI
+3. Select "TCP/IP(Server)" in the UI
 
 ### On Client Pi (Pi3B+):
 1. Modify the chatapp.py file:
@@ -121,9 +127,13 @@ The application uses the following ports:
 
 1. Start the application
 2. Select a protocol:
-   - Ethernet(Master): Acts as server
-   - Ethernet(Client): Connects to a master
-   - UART: For serial communication
+   - TCP/IP(Server): Acts as network server
+   - TCP/IP(Client): Connects to server
+   - UART/Serial: For serial port communication
+   - (Future) SPI: For high-speed, short-distance communication
+   - (Future) I2C: For inter-chip communication
+   - (Future) CAN: For robust industrial communication
+   - (Future) EtherCAT: For real-time industrial Ethernet
 3. Messages will appear in real-time
 4. Connection status is shown in system messages
 
