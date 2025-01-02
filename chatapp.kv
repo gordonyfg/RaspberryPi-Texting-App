@@ -1,28 +1,126 @@
-# ui/main.kv
 BoxLayout:
-    orientation: "vertical"
+    orientation: "horizontal"
+    padding: 10
+    spacing: 10
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.1, 1  # Dark background
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
-    Spinner:
-        id: protocol_spinner
-        text: "Select Protocol"
-        values: ["UART", "Ethernet"]
-        size_hint: (1, 0.1)
+    # Left side - Protocol Selection
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_x: 0.3
+        canvas.before:
+            Color:
+                rgba: 0.15, 0.15, 0.15, 1  # Slightly lighter dark
+            Rectangle:
+                pos: self.pos
+                size: self.size
 
-    TextInput:
-        id: message_input
-        hint_text: "Type your message here"
-        multiline: False
-        size_hint: (1, 0.2)
+        Label:
+            text: "Protocols"
+            size_hint_y: 0.1
+            bold: True
+            color: 0.9, 0.9, 0.9, 1  # Light text
 
-    Button:
-        text: "Send"
-        size_hint: (1, 0.1)
-        on_press: app.send_message()
+        ScrollView:
+            GridLayout:
+                id: protocol_list
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 5
+                padding: 5
 
-    Label:
-        id: chat_history
-        text: "Chat History:"
-        size_hint: (1, 0.6)
-        halign: "left"
-        valign: "top"
-        text_size: self.size
+    # Right side - Chat Area
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_x: 0.7
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: 0.12, 0.12, 0.12, 1  # Medium dark
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        ScrollView:
+            id: chat_scroll  # Add this id
+            size_hint: (1, 0.9)
+            bar_width: 10  # Make scrollbar more visible
+            GridLayout:
+                id: chat_history
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 15  # Increased spacing between messages
+                padding: 20, 20, 20, 20  # Left, Top, Right, Bottom padding
+
+        # Message Input Area
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: 5
+            TextInput:
+                id: message_input
+                hint_text: "Type your message here"
+                multiline: False
+                size_hint_x: 0.8
+                background_color: 0.2, 0.2, 0.2, 1  # Dark input background
+                foreground_color: 0.9, 0.9, 0.9, 1  # Light text
+                cursor_color: 0.9, 0.9, 0.9, 1
+                hint_text_color: 0.5, 0.5, 0.5, 1
+            Button:
+                text: "Send"
+                size_hint_x: 0.2
+                background_color: 0.2, 0.4, 0.6, 1  # Blue button
+                color: 0.9, 0.9, 0.9, 1
+                on_press: app.send_message()
+
+<ProtocolButton@Button>:
+    size_hint_y: None
+    height: "40dp"
+    background_normal: ""
+    background_color: 0.2, 0.2, 0.2, 1
+    color: 0.9, 0.9, 0.9, 1
+
+<MessageWrapper@BoxLayout>:
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: bubble.height
+    bubble: None  # Reference to bubble
+    is_sender: False
+    message_text: ''
+    spacing: 5  # Reduced spacing
+    padding: [0, 2]  # Reduced vertical padding
+    
+    Widget:
+        size_hint_x: 0.02
+    
+    MessageBubble:
+        id: bubble
+        size_hint_x: 0.55
+        size_hint_y: None  # Allow height to be determined by content
+        text: root.message_text
+        pos_hint: {'right': 1} if root.is_sender else {'x': 0}
+        on_texture_size: root.height = self.height  # Update wrapper height when bubble height changes
+    
+    Widget:
+        size_hint_x: 0.43
+
+<MessageBubble@Label>:
+    size_hint_y: None
+    height: self.texture_size[1] + 16  # Reduced padding
+    text_size: self.width - 20, None  # Reduced text padding
+    padding: [10, 8]  # Reduced internal padding
+    halign: "left"
+    text_size: self.width - 20, None  # Ensure text wrapping with less margin
+    canvas.before:
+        Color:
+            rgba: self.bubble_color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [12]  # Slightly reduced corner radius

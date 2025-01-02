@@ -1,10 +1,20 @@
 # protocols/protocol_handler.py
 
-class ProtocolHandler:
-    def send(self, message: str):
-        """Send a message through the protocol."""
-        raise NotImplementedError("This method should be overridden by subclasses.")
+from abc import ABC, abstractmethod
 
+class ProtocolHandler(ABC):
+    @abstractmethod
+    def send(self, message: str):
+        pass
+
+    @abstractmethod
     def receive(self) -> str:
-        """Receive a message through the protocol."""
-        raise NotImplementedError("This method should be overridden by subclasses.")
+        pass
+
+    def initialize(self):
+        """Optional initialization method"""
+        pass
+
+    def cleanup(self):
+        """Optional cleanup method"""
+        pass

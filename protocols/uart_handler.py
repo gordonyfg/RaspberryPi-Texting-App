@@ -7,7 +7,7 @@ class UARTHandler(ProtocolHandler):
         self.baudrate = baudrate
 
     def send(self, message: str):
-        print(f"UART: Sending message: {message}")
+        print(f"UART: Sending message '{message}' on port {self.port} at {self.baudrate} baud")
 
     def receive(self) -> str:
-        return "UART: Received a message"
+        return "UART: Message received!"
