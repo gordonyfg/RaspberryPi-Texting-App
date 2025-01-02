@@ -2,44 +2,62 @@ from flask import Flask, request, jsonify
 import sqlite3
 
 app = Flask(__name__)
+DATABASE = 'database/chat_history.db'
 
-# Database connection
-def get_db_connection():
-    conn = sqlite3.connect("database/chat_history.db")
-    conn.row_factory = sqlite3.Row
-    return conn
+def get_db():
+    db = sqlite3.connect(DATABASE)
+    db.row_factory = sqlite3.Row
+    return db
 
-# Get all messages
 @app.route('/messages', methods=['GET'])
 def get_messages():
     protocol = request.args.get('protocol')
-    conn = get_db_connection()
-    
-    if protocol:
-        messages = conn.execute('SELECT * FROM messages WHERE protocol = ?', (protocol,)).fetchall()
-    else:
-        messages = conn.execute('SELECT * FROM messages').fetchall()
-        
-    conn.close()
-    return jsonify([dict(row) for row in messages])
+    db = get_db()
+    try:
+        if protocol:
+            messages = db.execute(
+                'SELECT * FROM messages WHERE protocol = ? ORDER BY timestamp',
+                [protocol]
+            ).fetchall()
+        else:
+            messages = db.execute(
+                'SELECT * FROM messages ORDER BY timestamp'
+            ).fetchall()
+        return jsonify([dict(msg) for msg in messages])
+    finally:
+        db.close()
 
-# Add a new message
 @app.route('/messages', methods=['POST'])
 def add_message():
-    data = request.json
-    protocol = data['protocol']
-    sender = data['sender']
-    recipient = data['recipient']
-    message = data['message']
+    try:
+        data = request.get_json()
+        
+        # Check for required fields
+        required_fields = ['protocol', 'sender', 'recipient', 'message']
+        missing_fields = [field for field in required_fields if field not in data]
+        
+        if missing_fields:
+            return jsonify({
+                'error': 'Missing required fields',
+                'missing_fields': missing_fields
+            }), 400
 
-    conn = get_db_connection()
-    conn.execute(
-        'INSERT INTO messages (protocol, sender, recipient, message) VALUES (?, ?, ?, ?)',
-        (protocol, sender, recipient, message)
-    )
-    conn.commit()
-    conn.close()
-    return jsonify({"status": "success"}), 201
+        db = get_db()
+        cursor = db.cursor()
+        
+        cursor.execute('''
+            INSERT INTO messages (protocol, sender, recipient, message)
+            VALUES (?, ?, ?, ?)
+        ''', [data['protocol'], data['sender'], data['recipient'], data['message']])
+        
+        message_id = cursor.lastrowid
+        db.commit()
+        db.close()
+        
+        return jsonify({'id': message_id}), 201
+        
+    except (TypeError, ValueError, KeyError) as e:
+        return jsonify({'error': 'Invalid JSON data', 'details': str(e)}), 400
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
