@@ -1,4 +1,4 @@
-name: /home/gordon-yeung/projects/RaspberryPi-Texting-App/.conda
+name: rpi-texting-app-env
 channels:
   - defaults
   - https://repo.anaconda.com/pkgs/main
