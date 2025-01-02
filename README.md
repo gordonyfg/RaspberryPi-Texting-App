@@ -62,17 +62,60 @@ This project is a messaging application developed using the Kivy framework. It s
    ```bash
    pytest -v --cov=. --cov-report=term-missing | tee test_results.txt
    ```
-4. Run the application:
+
+## Two-Pi Communication Setup
+
+### On Master Pi (Pi400):
+1. Get the IP address:
+   ```bash
+   ifconfig
+   # Note down the IP address (e.g., 192.168.1.100)
+   ```
+2. Run the application:
    ```bash
    python chatapp.py
    ```
+3. Select "Ethernet(Master)" in the UI
+
+### On Client Pi (Pi3B+):
+1. Modify the chatapp.py file:
+   ```python
+   # Replace <MASTER_PI_IP> with the actual Master Pi IP
+   self.protocol_handlers = {
+       "Ethernet(Master)": EthernetMasterHandler(host="0.0.0.0", port=self.protocol_port),
+       "Ethernet(Client)": EthernetClientHandler(host="192.168.1.100", port=self.protocol_port),
+       "UART": UARTHandler(port="/dev/ttyUSB0", baudrate=9600),
+   }
+   ```
+2. Run the application:
+   ```bash
+   python chatapp.py
+   ```
+3. Select "Ethernet(Client)" in the UI
+
+### Troubleshooting
+- Ensure both Pis are on the same network
+- Check firewall settings:
+  ```bash
+  # On both Pis, allow incoming connections for both REST API and protocol ports
+  sudo ufw allow 5000:5001/tcp
+  ```
+- Test network connectivity:
+  ```bash
+  # From Client Pi
+  ping <MASTER_PI_IP>
+  ```
+- If connection fails, verify:
+  - IP addresses are correct
+  - Port 5001 is open for protocol communication
+  - Port 5000 (or next available) is open for REST API
+  - Both devices can see each other on network
 
 ## Configuration
 
-The application automatically finds available ports for:
-- REST API server (starting from port 5000)
-- Protocol communication (using next available port)
-If default ports are in use, the app will automatically find and use free ports.
+The application uses the following ports:
+- REST API server: starts from port 5000, finds next available if busy
+- Protocol communication: fixed at port 5001 for easier configuration
 
 ## Usage
 

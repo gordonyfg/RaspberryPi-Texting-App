@@ -29,7 +29,8 @@ def find_free_port(start_port=5000, max_attempts=100):
 class FlaskThread(threading.Thread):
     def __init__(self, app, port):  # Add port parameter
         threading.Thread.__init__(self, daemon=True)
-        self.srv = make_server('127.0.0.1', port, app)
+        # Allow connections from other devices
+        self.srv = make_server('0.0.0.0', port, app)
         self.ctx = app.app_context()
         self.ctx.push()
         self.port = port  # Store port number
@@ -129,14 +130,18 @@ class ChatApp(App):
         self.flask_thread = FlaskThread(self.flask_app, self.api_port)
         self.flask_thread.start()
         
-        # Update base URL with dynamic port
-        self.base_url = f"http://127.0.0.1:{self.api_port}/messages"
+        # Get the actual IP address of this device
+        hostname = socket.gethostname()
+        self.host_ip = socket.gethostbyname(hostname)
         
-        # Initialize protocol handlers with next available port
-        self.protocol_port = 5001#find_free_port(self.api_port + 1)
+        # Update base URL to use actual IP
+        self.base_url = f"http://{self.host_ip}:{self.api_port}/messages"
+        
+        # Initialize protocol handlers with actual IP
+        self.protocol_port = 5001  # Fixed port for easier configuration
         self.protocol_handlers = {
-            "Ethernet(Master)": EthernetMasterHandler(host="127.0.0.1", port=self.protocol_port),
-            "Ethernet(Client)": EthernetClientHandler(host="127.0.0.1", port=self.protocol_port),
+            "Ethernet(Master)": EthernetMasterHandler(host="0.0.0.0", port=self.protocol_port),
+            "Ethernet(Client)": EthernetClientHandler(host="<MASTER_PI_IP>", port=self.protocol_port),
             "UART": UARTHandler(port="/dev/ttyUSB0", baudrate=9600),
         }
         self.current_protocol = None
