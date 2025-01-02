@@ -58,18 +58,21 @@ This project is a messaging application developed using the Kivy framework. It s
 
 1. Clone the repository
 2. Install dependencies
-3. Initialize the database:
+3. Run tests and save results:
    ```bash
-   python database/setup_db.py
+   pytest -v --cov=. --cov-report=term-missing | tee test_results.txt
    ```
-4. Start the API server:
-   ```bash
-   python api.py
-   ```
-5. Run the application:
+4. Run the application:
    ```bash
    python chatapp.py
    ```
+
+## Configuration
+
+The application automatically finds available ports for:
+- REST API server (starting from port 5000)
+- Protocol communication (using next available port)
+If default ports are in use, the app will automatically find and use free ports.
 
 ## Usage
 

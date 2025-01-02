@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 PLAN.md
 database/chat_history.db
+database/chat_history.db
