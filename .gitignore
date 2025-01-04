@@ -163,3 +163,4 @@ cython_debug/
 PLAN.md
 database/chat_history.db
 database/chat_history.db
+database/chat_history.db

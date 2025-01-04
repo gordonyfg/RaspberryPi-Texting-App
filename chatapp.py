@@ -15,7 +15,7 @@ import threading
 from werkzeug.serving import make_server
 import socket
 
-def find_free_port(start_port=5000, max_attempts=100):
+def find_free_port(start_port=1000, max_attempts=100):
     """Find a free port starting from start_port"""
     for port in range(start_port, start_port + max_attempts):
         try:
@@ -138,10 +138,10 @@ class ChatApp(App):
         self.base_url = f"http://{self.host_ip}:{self.api_port}/messages"
         
         # Initialize protocol handlers with actual IP
-        self.protocol_port = 5001  # Fixed port for easier configuration
+        self.protocol_port = 5001  # Fixed port for easier confialreadyguration
         self.protocol_handlers = {
-            "TCP/IP(Server)": EthernetMasterHandler(host="0.0.0.0", port=self.protocol_port),
-            "TCP/IP(Client)": EthernetClientHandler(host="<MASTER_PI_IP>", port=self.protocol_port),
+            "TCP/IP(Server)": EthernetMasterHandler(host="127.0.0.1", port=self.protocol_port),
+            "TCP/IP(Client)": EthernetClientHandler(host="127.0.0.1", port=self.protocol_port),
             "UART/Serial": UARTHandler(port="/dev/ttyUSB0", baudrate=9600),
             # Future protocols:
             # "SPI": SPIHandler(bus=0, device=0),
@@ -191,7 +191,7 @@ class ChatApp(App):
         
         # Initialize new protocol
         handler = self.protocol_handlers[protocol]
-        #if hasattr(handler, 'initialize'):
+        #if hasattr(handler, 'initialize'):initialize
         status_message = handler.initialize()
 
         self.load_chat_history()
