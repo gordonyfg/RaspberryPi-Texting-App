@@ -38,13 +38,13 @@ This project is a messaging application developed using the Kivy framework. It s
 ## Demo GIFs
 
 ### 1. Laptop Ubuntu Environment
-![Laptop Demo](assets/2025_01_03_pcUbuntu_output.gif)
+![alt text](asset/2025_01_03_pcUbuntu_output.gif)
 
 ### 2. Raspberry Pi 400 (Master Server)
-![Pi400 Demo](assets/2025_01_03_pi400output.gif)
+![alt text](asset/2025_01_03_pi400output.gif)
 
 ### 3. Raspberry Pi 3B+ (Client)
-![Pi3B+ Demo](assets/2025_01_03_pi3bplus_output.gif)
+![alt text](asset/2025_01_03_pi3bplus_output.gif)
 
 ## Technical Stack
 
