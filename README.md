@@ -134,7 +134,7 @@ The application uses the following ports:
 - REST API server: starts from port 5000, finds next available if busy
 - Protocol communication: fixed at port 5001 for easier configuration
 
-## Usage
+## Usage and Roadmap
 
 1. Start the application
 2. Select a protocol:
@@ -145,8 +145,18 @@ The application uses the following ports:
    - (Future) I2C: For inter-chip communication
    - (Future) CAN: For robust industrial communication
    - (Future) EtherCAT: For real-time industrial Ethernet
-3. Messages will appear in real-time
-4. Connection status is shown in system messages
+   - (Future) MQTT: Lightweight messaging for IoT applications.
+   - (Future) Modbus: Industrial communication protocol (RTU and TCP).
+   - (Future) WebSocket: Real-time, bidirectional communication.
+   - (Future) Bluetooth Low Energy (BLE): Wireless communication.
+   - (Future) Zigbee/Z-Wave: Smart home and IoT protocols.
+3. Messages will appear in real-time.
+4. Connection status is shown in system messages.
+5. Planned features:
+   - User-defined Master Server IP.
+   - Optimize performance for Raspberry Pi 3B+ using RPI OS Lite.
+   - Advanced error handling and retry mechanisms for protocol failures.
+   - Enhanced UI performance and responsiveness.
 
 ## Architecture
 
